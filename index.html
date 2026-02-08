@@ -9,22 +9,22 @@
     <p>Відкрийте консоль браузера (F12), щоб протестувати функцію <code>triangle</code>.</p>
 
     <script>
-        // Вивід інструкції при завантаженні сторінки [cite: 18]
+
         console.log("Інструкція з використання функції triangle(val1, type1, val2, type2):");
         console.log("Можливі типи: 'leg', 'hypotenuse', 'adjacent angle', 'opposite angle', 'angle' [cite: 22]");
         console.log("Приклад: triangle(7, 'leg', 18, 'hypotenuse'); [cite: 26]");
 
         function triangle(val1, type1, val2, type2) {
-            // Перевірка на від'ємні або нульові значення [cite: 38]
+         
             if (val1 <= 0 || val2 <= 0) {
                 console.log("Zero or negative input");
                 return "Zero or negative input";
             }
 
-            const toRad = (deg) => (deg * Math.PI) / 180; // [cite: 28]
-            const toDeg = (rad) => (rad * 180) / Math.PI; // [cite: 28]
+            const toRad = (deg) => (deg * Math.PI) / 180; 
+            const toDeg = (rad) => (rad * 180) / Math.PI; 
 
-            // Зберігаємо аргументи в об'єкт для зручного доступу незалежно від порядку [cite: 25]
+          
             const data = {};
             data[type1] = val1;
             data[type2] = val2;
@@ -32,11 +32,11 @@
             let a, b, c, alpha, beta;
 
             try {
-                // 1. Катет і гіпотенуза [cite: 22]
+            
                 if (data.leg && data.hypotenuse) {
                     a = data.leg;
                     c = data.hypotenuse;
-                    if (a >= c) { // Катет не може бути більшим за гіпотенузу [cite: 38]
+                    if (a >= c) {
                         console.log("Катет не може бути більшим або рівним гіпотенузі");
                         return "failed";
                     }
@@ -44,16 +44,16 @@
                     alpha = winDeg(Math.asin(a / c));
                     beta = 90 - alpha;
                 }
-                // 2. Катет і протилежний кут [cite: 22, 35]
+                
                 else if (data.leg && data['opposite angle']) {
                     a = data.leg;
                     alpha = data['opposite angle'];
-                    if (alpha >= 90) return "failed"; // Кут має бути гострим [cite: 38]
+                    if (alpha >= 90) return "failed"; 
                     c = a / Math.sin(toRad(alpha));
                     b = Math.sqrt(c * c - a * a);
                     beta = 90 - alpha;
                 }
-                // 3. Катет і прилеглий кут [cite: 22, 36]
+               
                 else if (data.leg && data['adjacent angle']) {
                     b = data.leg;
                     beta = data['adjacent angle'];
@@ -62,7 +62,7 @@
                     a = Math.sqrt(c * c - b * b);
                     alpha = 90 - beta;
                 }
-                // 4. Гіпотенуза і гострий кут [cite: 22]
+                
                 else if (data.hypotenuse && data.angle) {
                     c = data.hypotenuse;
                     alpha = data.angle;
@@ -71,7 +71,7 @@
                     b = c * Math.cos(toRad(alpha));
                     beta = 90 - alpha;
                 }
-                // 5. Два катети (якщо вказано тип 'leg' двічі) [cite: 25]
+            
                 else if (type1 === "leg" && type2 === "leg") {
                     a = val1;
                     b = val2;
@@ -79,28 +79,29 @@
                     alpha = toDeg(Math.atan(a / b));
                     beta = 90 - alpha;
                 }
-                // Якщо типи неправильні або несумісні [cite: 37]
+              
                 else {
                     console.log("Неправильний тип аргументів. Перечитайте інструкцію.");
                     return "failed";
                 }
 
-                // Вивід результатів за класичними позначеннями [cite: 29, 33]
+              
                 console.log(`a = ${a}`);
                 console.log(`b = ${b}`);
                 console.log(`c = ${c}`);
                 console.log(`alpha = ${alpha}`);
                 console.log(`beta = ${beta}`);
 
-                return "success"; // [cite: 37]
+                return "success";
 
             } catch (e) {
-                return "failed"; // [cite: 37]
+                return "failed";
             }
         }
 
-        // Допоміжна функція для виправлення помилки в назві (випадкова описка в коді вище)
+      
         function winDeg(rad) { return (rad * 180) / Math.PI; }
     </script>
 </body>
+
 </html>
