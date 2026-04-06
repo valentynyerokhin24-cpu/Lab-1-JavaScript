@@ -2,106 +2,68 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>Лабораторна робота №1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лабораторна робота №4 - Валентин</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 30px; background-color: #f4f7f6; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { color: #333; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
+        button { background-color: #007bff; color: white; border: none; padding: 12px 25px; border-radius: 5px; cursor: pointer; font-size: 16px; transition: 0.3s; }
+        button:hover { background-color: #0056b3; }
+        .log-box { margin-top: 20px; padding: 15px; background: #2d2d2d; color: #adff2f; border-radius: 5px; font-family: monospace; min-height: 100px; white-space: pre-wrap; }
+    </style>
 </head>
 <body>
-    <h1>Лабораторна робота №1</h1>
-    <p>Відкрийте консоль браузера (F12), щоб протестувати функцію <code>triangle</code>.</p>
 
-    <script>
+<div class="container">
+    <h1>Лабораторна робота №4</h1>
+    <p><strong>Тема:</strong> Розробка бібліотек у JavaScript [cite: 2]</p>
+    <p>Натисніть кнопку нижче, щоб запустити сортування масивів (100+ елементів). Результати детально виводяться в <strong>консоль (F12)</strong>.</p>
+    
+    <button id="runBtn">Запустити тести сортування</button>
 
-        console.log("Інструкція з використання функції triangle(val1, type1, val2, type2):");
-        console.log("Можливі типи: 'leg', 'hypotenuse', 'adjacent angle', 'opposite angle', 'angle' [cite: 22]");
-        console.log("Приклад: triangle(7, 'leg', 18, 'hypotenuse'); [cite: 26]");
+    <div class="log-box" id="displayLog">Очікування запуску...</div>
+</div>
 
-        function triangle(val1, type1, val2, type2) {
-         
-            if (val1 <= 0 || val2 <= 0) {
-                console.log("Zero or negative input");
-                return "Zero or negative input";
-            }
+<script src="sortLibrary.js"></script>
+<script>
+    document.getElementById('runBtn').addEventListener('click', function() {
+        const logBox = document.getElementById('displayLog');
+        logBox.innerHTML = "Тестування розпочато...\n";
 
-            const toRad = (deg) => (deg * Math.PI) / 180; 
-            const toDeg = (rad) => (rad * 180) / Math.PI; 
+        // Функція для створення випадкового масиву
+        const createArray = (size) => Array.from({length: size}, () => Math.floor(Math.random() * 1000));
 
-          
-            const data = {};
-            data[type1] = val1;
-            data[type2] = val2;
-
-            let a, b, c, alpha, beta;
-
-            try {
-            
-                if (data.leg && data.hypotenuse) {
-                    a = data.leg;
-                    c = data.hypotenuse;
-                    if (a >= c) {
-                        console.log("Катет не може бути більшим або рівним гіпотенузі");
-                        return "failed";
-                    }
-                    b = Math.sqrt(c * c - a * a);
-                    alpha = winDeg(Math.asin(a / c));
-                    beta = 90 - alpha;
-                }
-                
-                else if (data.leg && data['opposite angle']) {
-                    a = data.leg;
-                    alpha = data['opposite angle'];
-                    if (alpha >= 90) return "failed"; 
-                    c = a / Math.sin(toRad(alpha));
-                    b = Math.sqrt(c * c - a * a);
-                    beta = 90 - alpha;
-                }
-               
-                else if (data.leg && data['adjacent angle']) {
-                    b = data.leg;
-                    beta = data['adjacent angle'];
-                    if (beta >= 90) return "failed";
-                    c = b / Math.cos(toRad(beta));
-                    a = Math.sqrt(c * c - b * b);
-                    alpha = 90 - beta;
-                }
-                
-                else if (data.hypotenuse && data.angle) {
-                    c = data.hypotenuse;
-                    alpha = data.angle;
-                    if (alpha >= 90) return "failed";
-                    a = c * Math.sin(toRad(alpha));
-                    b = c * Math.cos(toRad(alpha));
-                    beta = 90 - alpha;
-                }
-            
-                else if (type1 === "leg" && type2 === "leg") {
-                    a = val1;
-                    b = val2;
-                    c = Math.sqrt(a * a + b * b);
-                    alpha = toDeg(Math.atan(a / b));
-                    beta = 90 - alpha;
-                }
-              
-                else {
-                    console.log("Неправильний тип аргументів. Перечитайте інструкцію.");
-                    return "failed";
-                }
-
-              
-                console.log(`a = ${a}`);
-                console.log(`b = ${b}`);
-                console.log(`c = ${c}`);
-                console.log(`alpha = ${alpha}`);
-                console.log(`beta = ${beta}`);
-
-                return "success";
-
-            } catch (e) {
-                return "failed";
-            }
+        // 1. Тест на нерозрідженому масиві (100+ елементів) [cite: 36]
+        let normalArr = createArray(120);
+        
+        // 2. Тест на розрідженому масиві (100+ елементів) [cite: 37]
+        let sparseArr = new Array(150);
+        for(let i = 0; i < 40; i++) {
+            let randomIdx = Math.floor(Math.random() * 150);
+            sparseArr[randomIdx] = Math.floor(Math.random() * 1000);
         }
 
-      
-        function winDeg(rad) { return (rad * 180) / Math.PI; }
-    </script>
-</body>
+        const methods = ['bubbleSort', 'selectionSort', 'insertionSort', 'shellSort', 'quickSort'];
+        
+        console.clear();
+        console.log("%c--- ТЕСТУВАННЯ БІБЛІОТЕКИ ---", "font-size: 20px; font-weight: bold;");
 
+        logBox.innerHTML += "\n[1] ТЕСТ: НЕРОЗРІДЖЕНИЙ МАСИВ (120 елементів)\n";
+        methods.forEach(m => {
+            SortLib[m]([...normalArr], true);
+            logBox.innerHTML += ` - ${m} виконано (див. консоль)\n`;
+        });
+
+        logBox.innerHTML += "\n[2] ТЕСТ: РОЗРІДЖЕНИЙ МАСИВ (150 елементів)\n";
+        methods.forEach(m => {
+            SortLib[m]([...sparseArr], false);
+            logBox.innerHTML += ` - ${m} виконано (спадання, див. консоль)\n`;
+        });
+
+        logBox.innerHTML += "\nДемонстрацію завершено!";
+    });
+</script>
+
+</body>
 </html>
